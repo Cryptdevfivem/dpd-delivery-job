@@ -33,7 +33,7 @@ function LoadWorkPlayerSkin(deliveryType)
 	local playerPed = PlayerPedId()
 
 	if clothing == nil then 
-		clothing = tENHANCE.getCustomization()
+		clothing = tvRP.getCustomization()
 	end
 	if IsPedMale(playerPed) then
 		for k, v in pairs(dpdcfg.OutfitVan) do
@@ -47,7 +47,7 @@ function LoadWorkPlayerSkin(deliveryType)
 end
 
 function LoadDefaultPlayerSkin()
-    tENHANCE.setCustomization(clothing)
+    tvRP.setCustomization(clothing)
     clothing = nil
 end
 
@@ -101,7 +101,7 @@ function HandleLogic()
 			
 			if GetDistanceBetweenCoords(pCoords.x, pCoords.y, pCoords.z, DeliveryLocation.Item2.x, DeliveryLocation.Item2.y, DeliveryLocation.Item2.z, true) < 1.5 then
 				
-				TriggerServerEvent("ENHANCE:finishDelivery:server", CurrentType)
+				TriggerServerEvent("vRP:finishDelivery:server", CurrentType)
 				PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", false, 0, true)
 				FinishedJobs = FinishedJobs + 1
 				if FinishedJobs >= #DeliveryRoutes then
@@ -276,7 +276,7 @@ end
 
 
 function StartDelivery(deliveryType)
-	TriggerServerEvent("ENHANCE:removeSafeMoney:server", deliveryType)
+	TriggerServerEvent("vRP:removeSafeMoney:server", deliveryType)
 	dpdjob = true
 	starteddpd = true
 end
@@ -451,7 +451,7 @@ end
 function ReturnVehicle(deliveryType)
 	SetVehicleAsNoLongerNeeded(CurrentVehicle)
 	DeleteEntity(CurrentVehicle)
-	tENHANCE.notify("Your car has been returned")
+	tvRP.notify("Your car has been returned")
 	FinishDelivery(deliveryType, true)
 end
 
@@ -483,7 +483,7 @@ function FinishDelivery(deliveryType, safeReturn)
 	CurrentBlip = nil
 	CurrentType = ''
 	dpdjob = false
-	TriggerServerEvent("ENHANCE:returnSafe:server", deliveryType, safeReturn)
+	TriggerServerEvent("vRP:returnSafe:server", deliveryType, safeReturn)
 	
 	LoadDefaultPlayerSkin()
 end
@@ -607,8 +607,8 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('ENHANCE:startJob:client')
-AddEventHandler('ENHANCE:startJob:client', function(deliveryType)
+RegisterNetEvent('vRP:startJob:client')
+AddEventHandler('vRP:startJob:client', function(deliveryType)
 	TriggerEvent("MpGameMessage:send", "Delivery", "Drive the car safely to the destination and delivery the ~y~goods~s~", 3500, 'success')
 	LoadWorkPlayerSkin(deliveryType)
 	local ModelHash = GetHashKey("prop_paper_bag_01")
